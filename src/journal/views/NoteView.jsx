@@ -47,17 +47,18 @@ export const NoteView = ({ note, onNoteDeleted }) => {
 
   // Solo actualiza el formulario inicial cuando cambia la nota (no cuando subes imágenes)
   useEffect(() => {
-    if (note?.id !== prevNoteId.current && notaData) {
+    if (notaData) {
       setInitialFormData(notaData);
       prevNoteId.current = note?.id;
     }
-  }, [note?.id, notaData]);
+  }, [notaData, note?.id]);
 
   const { body, title, date, onInputChange, formState, onResetForm } = useForm(
     initialFormData
   );
 
   const dataString = useMemo(() => {
+    if (!date) return "";
     const newDate = new Date(date);
     return newDate.toUTCString();
   }, [date]);
@@ -189,7 +190,7 @@ export const NoteView = ({ note, onNoteDeleted }) => {
       </div>
       <div className="mb-4">
         <label className="block text-sm font-semibold text-gray-600 mb-1">
-          Título
+          Título de la nota
         </label>
         <input
           type="text"
@@ -202,7 +203,7 @@ export const NoteView = ({ note, onNoteDeleted }) => {
       </div>
       <div className="mb-4">
         <label className="block text-sm font-semibold text-gray-600 mb-1">
-          Descripción
+          Que sucedió hoy?
         </label>
         <textarea
           name="body"
@@ -214,6 +215,7 @@ export const NoteView = ({ note, onNoteDeleted }) => {
         />
       </div>
       <div>
+<h3>Nuestra galeria de imagenes</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {notaData?.imageUrls?.map((url, idx) => (
             <img
